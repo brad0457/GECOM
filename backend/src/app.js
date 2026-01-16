@@ -6,9 +6,16 @@ import TareaRoutes from './routes/TareaRoutes.js';
 import ReporteRoutes from './routes/ReporteRoutes.js';
 import AuthRoutes from './routes/AuthRoutes.js';
 import dotenv from 'dotenv';
+import cors from 'cors';
+
 dotenv.config();
 
 const app = express();
+
+app.use(cors({
+  origin: 'http://localhost:5173'
+}));
+
 
 app.use(express.json());
 

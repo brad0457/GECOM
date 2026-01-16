@@ -6,7 +6,7 @@ export const validarUsuario = [
     .notEmpty().withMessage('El nombre es obligatorio'),
   body('correo')
     .isEmail().withMessage('Debe ser un correo válido'),
-  body('contraseña')
+  body('password')
     .isLength({ min: 6 }).withMessage('La contraseña debe tener mínimo 6 caracteres')
 ];
 
