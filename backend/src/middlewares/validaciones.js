@@ -7,7 +7,10 @@ export const validarUsuario = [
   body('correo')
     .isEmail().withMessage('Debe ser un correo válido'),
   body('password')
-    .isLength({ min: 6 }).withMessage('La contraseña debe tener mínimo 6 caracteres')
+    .isLength({ min: 6 }).withMessage('La contraseña debe tener mínimo 6 caracteres'),
+  body('rol')
+    .isIn(['admin', 'asistente', 'enfermera', 'doctor'])
+    .withMessage('El rol debe ser admin, asistente, enfermera o doctor')
 ];
 
 // Validaciones para Paciente
@@ -65,4 +68,22 @@ export const manejarValidaciones = (req, res, next) => {
     return res.status(400).json({ success: false, errors: errores.array() });
   }
   next();
+};
+
+// Middleware para permitir solo a admin
+export const soloAdmin = (req, res, next) => {
+  if (req.usuarioRol === 'admin') {
+    return next();
+  }
+  return res.status(403).json({ error: 'Acceso denegado: solo admin puede realizar esta acción' });
+};
+
+// Middleware genérico para varios roles
+export const tieneRol = (...rolesPermitidos) => {
+  return (req, res, next) => {
+    if (rolesPermitidos.includes(req.usuarioRol)) {
+      return next();
+    }
+    return res.status(403).json({ error: 'Acceso denegado: rol no autorizado' });
+  };
 };

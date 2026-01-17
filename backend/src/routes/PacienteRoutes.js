@@ -6,14 +6,24 @@ import {
   actualizarPaciente,
   eliminarPaciente
 } from '../controllers/PacienteController.js';
-import { validarPaciente, manejarValidaciones } from '../middlewares/validaciones.js';
+import { validarPaciente, manejarValidaciones, tieneRol } from '../middlewares/validaciones.js';
+import { verificarToken } from '../middlewares/authMiddleware.js';
 
 const router = Router();
 
-router.get('/', listarPacientes);
-router.get('/:id', obtenerPaciente);
-router.post('/', validarPaciente, manejarValidaciones, crearPaciente);
-router.put('/:id', validarPaciente, manejarValidaciones, actualizarPaciente);
-router.delete('/:id', eliminarPaciente);
+// Listar pacientes: admin, doctor, enfermera, asistente
+router.get('/', verificarToken, tieneRol('admin', 'doctor', 'enfermera', 'asistente'), listarPacientes);
+
+// Obtener paciente específico: admin, doctor, enfermera, asistente
+router.get('/:id', verificarToken, tieneRol('admin', 'doctor', 'enfermera', 'asistente'), obtenerPaciente);
+
+// Crear paciente: admin, asistente, enfermera
+router.post('/', verificarToken, tieneRol('admin', 'asistente', 'enfermera'), validarPaciente, manejarValidaciones, crearPaciente);
+
+// Actualizar paciente: admin, doctor, enfermera
+router.put('/:id', verificarToken, tieneRol('admin', 'doctor', 'enfermera'), validarPaciente, manejarValidaciones, actualizarPaciente);
+
+// Eliminar paciente: solo admin
+router.delete('/:id', verificarToken, tieneRol('admin'), eliminarPaciente);
 
 export default router;

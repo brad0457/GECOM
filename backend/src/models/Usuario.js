@@ -20,6 +20,11 @@ const Usuario = sequelize.define('Usuario', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  rol: {
+    type: DataTypes.ENUM('admin', 'asistente', 'enfermera', 'doctor'),
+    allowNull: false,
+    defaultValue: 'asistente', // por defecto será asistente
+  },
 }, {
   tableName: 'usuario', // nombre exacto de la tabla en MySQL
   timestamps: true,     // crea createdAt y updatedAt automáticamente

@@ -22,9 +22,16 @@ export const obtenerUsuario = async (req, res, next) => {
 
 export const crearUsuario = async (req, res, next) => {
   try {
-    const { nombre, correo, contraseña } = req.body;
-    const hash = await bcrypt.hash(contraseña, 10);
-    const nuevoUsuario = await Usuario.create({ nombre, correo, contraseña: hash });
+    const { nombre, correo, password, rol } = req.body;
+    const hash = await bcrypt.hash(password, 10);
+
+    const nuevoUsuario = await Usuario.create({
+      nombre,
+      correo,
+      password: hash,
+      rol
+    });
+
     res.status(201).json({ success: true, data: nuevoUsuario });
   } catch (error) {
     next(error);
@@ -36,9 +43,16 @@ export const actualizarUsuario = async (req, res, next) => {
     const usuario = await Usuario.findByPk(req.params.id);
     if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
 
-    const { nombre, correo, contraseña } = req.body;
-    const hash = contraseña ? await bcrypt.hash(contraseña, 10) : usuario.contraseña;
-    await usuario.update({ nombre, correo, contraseña: hash });
+    const { nombre, correo, password, rol } = req.body;
+    const hash = password ? await bcrypt.hash(password, 10) : usuario.password;
+
+    await usuario.update({
+      nombre,
+      correo,
+      password: hash,
+      rol: rol ?? usuario.rol
+    });
+
     res.json({ success: true, data: usuario });
   } catch (error) {
     next(error);

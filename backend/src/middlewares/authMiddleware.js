@@ -10,7 +10,11 @@ export const verificarToken = (req, res, next) => {
   try {
     // Verificar token con la clave secreta
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.usuarioId = decoded.id; // Guardamos el id del usuario en la request
+
+    // Guardamos datos útiles en la request
+    req.usuarioId = decoded.id;   // ID del usuario
+    req.usuarioRol = decoded.rol; // Rol del usuario
+
     next();
   } catch (error) {
     return res.status(401).json({ error: 'Token inválido o expirado' });

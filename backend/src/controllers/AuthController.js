@@ -5,16 +5,17 @@ import jwt from 'jsonwebtoken';
 // Registro de usuario
 export const register = async (req, res, next) => {
   try {
-    const { nombre, correo, password } = req.body;
+    const { nombre, correo, password, rol } = req.body; // <-- añadimos rol
 
     // Encriptar contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Crear usuario
+    // Crear usuario con rol
     const usuario = await Usuario.create({
       nombre,
       correo,
-      password: hashedPassword
+      password: hashedPassword,
+      rol // <-- guardamos rol en la DB
     });
 
     res.status(201).json({ success: true, data: usuario });
@@ -22,7 +23,10 @@ export const register = async (req, res, next) => {
     console.error('Error al registrar usuario:', error);
 
     // Devuelve todos los errores de validación
-    if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
+    if (
+      error.name === 'SequelizeValidationError' ||
+      error.name === 'SequelizeUniqueConstraintError'
+    ) {
       return res.status(400).json({
         success: false,
         errors: error.errors.map(e => ({
@@ -38,7 +42,6 @@ export const register = async (req, res, next) => {
 
 // Login de usuario
 export const login = async (req, res, next) => {
-  console.log(process.env.JWT_SECRET);
   try {
     const { correo, password } = req.body;
 
@@ -50,14 +53,15 @@ export const login = async (req, res, next) => {
     const valido = await bcrypt.compare(password, usuario.password);
     if (!valido) return res.status(401).json({ error: 'Credenciales inválidas' });
 
-    // Generar token
+    // Generar token con rol incluido
     const token = jwt.sign(
-      { id: usuario.idUsuario },
+      { id: usuario.idUsuario, rol: usuario.rol }, // <-- añadimos rol al payload
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
 
-    res.json({ success: true, token });
+    // Devolvemos token y rol al frontend
+    res.json({ success: true, token, rol: usuario.rol });
   } catch (error) {
     next(error);
   }
