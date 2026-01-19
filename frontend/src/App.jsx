@@ -1,8 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './routes/ProtectedRoute';
-import Login from './pages/Login';
-import Register from './pages/Register';
+import Login from './pages/Login/Login.jsx';
 import Dashboard from './pages/Dashboard';
 
 // Importar react-toastify
@@ -16,7 +15,6 @@ function App() {
         <Routes>
           {/* Rutas públicas */}
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
 
           {/* Rutas protegidas */}
           <Route element={<ProtectedRoute />}>
