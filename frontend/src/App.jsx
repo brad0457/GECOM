@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './routes/ProtectedRoute';
 import Login from './pages/Login/Login.jsx';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/Dashboard/Dashboard.jsx';
 
 // Importar react-toastify
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,7 +18,7 @@ function App() {
 
           {/* Rutas protegidas */}
           <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
           </Route>
         </Routes>
 
