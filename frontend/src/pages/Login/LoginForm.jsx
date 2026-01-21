@@ -5,16 +5,20 @@ import { AuthContext } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
 
 function LoginForm() {
+  // Estados para manejar los campos del formulario y estado de carga.
   const [correo, setCorreo] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Contexto de autenticación y navegación.
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  // Función para manejar el envío del formulario.
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validación básica de campos requeridos.
     if (!correo || !password) {
       toast.error('Completa todos los campos');
       return;
@@ -22,22 +26,31 @@ function LoginForm() {
 
     setLoading(true);
     try {
+      // Solicitud de autenticación al servidor.
       const res = await api.post('/auth/login', { correo, password });
+      
+      // Actualización del estado de autenticación.
       login(res.data.token);
       toast.success('Bienvenido');
+      
+      // Redirección al dashboard después del login exitoso.
       navigate('/dashboard');
     } catch (error) {
+      // Manejo de errores de autenticación
       toast.error(error.response?.data?.message || 'Credenciales inválidas');
     } finally {
+      // Restablecimiento del estado de carga independientemente del resultado.
       setLoading(false);
     }
   };
 
+  // Renderizado del formulario.
   return (
     <form
       onSubmit={handleSubmit}
       className="w-full max-w-sm bg-white rounded-2xl shadow-xl p-8"
     >
+      {/* Encabezado con logo o ícono */}
       <div className="flex flex-col items-center mb-8">
         <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center text-white text-xl mb-3">
           G
@@ -45,6 +58,7 @@ function LoginForm() {
         <p className="text-gray-500 text-sm">Accede a tu cuenta</p>
       </div>
 
+      {/* Campo para correo electrónico */}
       <div className="mb-5">
         <label htmlFor="correo" className="block text-sm text-gray-600 mb-1">
           Correo
@@ -60,6 +74,7 @@ function LoginForm() {
         />
       </div>
 
+      {/* Campo para contraseña */}
       <div className="mb-6">
         <label htmlFor="password" className="block text-sm text-gray-600 mb-1">
           Contraseña
@@ -75,6 +90,7 @@ function LoginForm() {
         />
       </div>
 
+      {/* Botón de envío del formulario */}
       <button
         type="submit"
         disabled={loading}
@@ -83,6 +99,7 @@ function LoginForm() {
         {loading ? 'Ingresando...' : 'Ingresar'}
       </button>
 
+      {/* Pie de página con nombre de la aplicación */}
       <div className="mt-6 text-center text-sm text-gray-400">
         GECOM · Gestor para Consultorio Médico
       </div>
