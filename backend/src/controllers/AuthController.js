@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 // Registro de usuario
 export const register = async (req, res, next) => {
   try {
-    const { nombre, correo, password, rol } = req.body; // <-- añadimos rol
+    const { nombre, correo, password, rol } = req.body;
 
     // Encriptar contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -15,7 +15,7 @@ export const register = async (req, res, next) => {
       nombre,
       correo,
       password: hashedPassword,
-      rol // <-- guardamos rol en la DB
+      rol
     });
 
     res.status(201).json({ success: true, data: usuario });
@@ -53,15 +53,19 @@ export const login = async (req, res, next) => {
     const valido = await bcrypt.compare(password, usuario.password);
     if (!valido) return res.status(401).json({ error: 'Credenciales inválidas' });
 
-    // Generar token con rol incluido
+    // Generar token con id, rol y nombre
     const token = jwt.sign(
-      { id: usuario.idUsuario, rol: usuario.rol }, // <-- añadimos rol al payload
+      { 
+        id: usuario.idUsuario, 
+        rol: usuario.rol,
+        nombre: usuario.nombre
+      },
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
 
-    // Devolvemos token y rol al frontend
-    res.json({ success: true, token, rol: usuario.rol });
+    // Devolvemos token y datos del usuario al frontend
+    res.json({ success: true, token, rol: usuario.rol, nombre: usuario.nombre });
   } catch (error) {
     next(error);
   }

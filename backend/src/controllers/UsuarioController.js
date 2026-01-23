@@ -44,14 +44,20 @@ export const actualizarUsuario = async (req, res, next) => {
     if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
 
     const { nombre, correo, password, rol } = req.body;
-    const hash = password ? await bcrypt.hash(password, 10) : usuario.password;
 
-    await usuario.update({
+    // Preparar datos para actualizar
+    const datosActualizar = {
       nombre,
       correo,
-      password: hash,
-      rol: rol ?? usuario.rol
-    });
+      rol
+    };
+
+    // Solo actualizar password si se envió uno nuevo y no está vacío
+    if (password && password.trim() !== '') {
+      datosActualizar.password = await bcrypt.hash(password, 10);
+    }
+
+    await usuario.update(datosActualizar);
 
     res.json({ success: true, data: usuario });
   } catch (error) {

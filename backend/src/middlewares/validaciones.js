@@ -1,6 +1,6 @@
 import { body, validationResult } from 'express-validator';
 
-// Validaciones para Usuario
+// Validaciones para Usuario (crear)
 export const validarUsuario = [
   body('nombre')
     .notEmpty().withMessage('El nombre es obligatorio'),
@@ -13,16 +13,18 @@ export const validarUsuario = [
     .withMessage('El rol debe ser admin, asistente, enfermera o doctor')
 ];
 
-// Validaciones para Paciente
-export const validarPaciente = [
+// Validaciones para Usuario (actualizar - password opcional)
+export const validarActualizarUsuario = [
   body('nombre')
     .notEmpty().withMessage('El nombre es obligatorio'),
-  body('documento')
-    .notEmpty().withMessage('El documento es obligatorio'),
-  body('fechaNacimiento')
-    .isDate().withMessage('Debe ser una fecha válida'),
-  body('contacto')
-    .notEmpty().withMessage('El contacto es obligatorio')
+  body('correo')
+    .isEmail().withMessage('Debe ser un correo válido'),
+  body('password')
+    .optional()
+    .isLength({ min: 6 }).withMessage('La contraseña debe tener mínimo 6 caracteres'),
+  body('rol')
+    .isIn(['admin', 'asistente', 'enfermera', 'doctor'])
+    .withMessage('El rol debe ser admin, asistente, enfermera o doctor')
 ];
 
 // Validaciones para Cita
@@ -86,4 +88,36 @@ export const tieneRol = (...rolesPermitidos) => {
     }
     return res.status(403).json({ error: 'Acceso denegado: rol no autorizado' });
   };
+};
+
+// Validaciones para Paciente (crear)
+export const validarPaciente = [
+  body('nombre')
+    .notEmpty().withMessage('El nombre es obligatorio'),
+  body('documento')
+    .notEmpty().withMessage('El documento es obligatorio'),
+  body('fechaNacimiento')
+    .isDate().withMessage('Debe ser una fecha válida'),
+  body('contacto')
+    .optional()
+];
+
+// Validaciones para Paciente (actualizar)
+export const validarActualizarPaciente = [
+  body('nombre')
+    .notEmpty().withMessage('El nombre es obligatorio'),
+  body('documento')
+    .notEmpty().withMessage('El documento es obligatorio'),
+  body('fechaNacimiento')
+    .isDate().withMessage('Debe ser una fecha válida'),
+  body('contacto')
+    .optional()
+];
+
+// Middleware para admin y asistente
+export const adminOAsistente = (req, res, next) => {
+  if (req.usuarioRol === 'admin' || req.usuarioRol === 'asistente') {
+    return next();
+  }
+  return res.status(403).json({ error: 'Acceso denegado: solo admin o asistente pueden realizar esta acción' });
 };

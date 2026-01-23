@@ -2,8 +2,8 @@ import LoginForm from '../Login/LoginForm';
 
 function Login() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300">
-      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-teal-700 via-cyan-700 to-blue-800">
+      <div className="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-md border border-teal-100">
         <LoginForm />
       </div>
     </div>
