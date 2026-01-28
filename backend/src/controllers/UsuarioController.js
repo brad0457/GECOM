@@ -76,3 +76,26 @@ export const eliminarUsuario = async (req, res, next) => {
     next(error);
   }
 };
+
+export const cambiarPassword = async (req, res, next) => {
+  try {
+    const { passwordActual, passwordNueva } = req.body;
+    const usuarioId = req.usuarioId; // Viene del token
+
+    const usuario = await Usuario.findByPk(usuarioId);
+    if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
+
+    // Verificar password actual
+    const valido = await bcrypt.compare(passwordActual, usuario.password);
+    if (!valido) return res.status(401).json({ error: 'Contraseña actual incorrecta' });
+
+    // Actualizar con nueva contraseña
+    const hash = await bcrypt.hash(passwordNueva, 10);
+    usuario.password = hash;
+    await usuario.save();
+
+    res.json({ success: true, message: 'Contraseña actualizada correctamente' });
+  } catch (error) {
+    next(error);
+  }
+};

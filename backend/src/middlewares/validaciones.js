@@ -27,7 +27,7 @@ export const validarActualizarUsuario = [
     .withMessage('El rol debe ser admin, asistente, enfermera o doctor')
 ];
 
-// Validaciones para Cita
+// Validaciones para Cita (crear)
 export const validarCita = [
   body('fecha')
     .isDate().withMessage('Debe ser una fecha válida'),
@@ -35,6 +35,30 @@ export const validarCita = [
     .notEmpty().withMessage('La hora es obligatoria'),
   body('motivo')
     .notEmpty().withMessage('El motivo es obligatorio'),
+  body('estado')
+    .optional()
+    .isIn(['pendiente', 'completada', 'cancelada']).withMessage('Estado inválido'),
+  body('observaciones')
+    .optional(),
+  body('idUsuario')
+    .isInt().withMessage('Debe ser un ID de usuario válido'),
+  body('idPaciente')
+    .isInt().withMessage('Debe ser un ID de paciente válido')
+];
+
+// Validaciones para Cita (actualizar)
+export const validarActualizarCita = [
+  body('fecha')
+    .isDate().withMessage('Debe ser una fecha válida'),
+  body('hora')
+    .notEmpty().withMessage('La hora es obligatoria'),
+  body('motivo')
+    .notEmpty().withMessage('El motivo es obligatorio'),
+  body('estado')
+    .optional()
+    .isIn(['pendiente', 'completada', 'cancelada']).withMessage('Estado inválido'),
+  body('observaciones')
+    .optional(),
   body('idUsuario')
     .isInt().withMessage('Debe ser un ID de usuario válido'),
   body('idPaciente')
@@ -49,6 +73,21 @@ export const validarTarea = [
     .notEmpty().withMessage('La descripción es obligatoria'),
   body('estado')
     .isIn(['pendiente', 'completada']).withMessage('El estado debe ser pendiente o completada'),
+  body('idUsuario')
+    .isInt().withMessage('Debe ser un ID de usuario válido')
+];
+
+// Validaciones para Tarea (actualizar)
+export const validarActualizarTarea = [
+  body('titulo')
+    .notEmpty().withMessage('El título es obligatorio'),
+  body('descripcion')
+    .optional(),
+  body('fechaLimite')
+    .isDate().withMessage('Debe ser una fecha válida'),
+  body('estado')
+    .optional()
+    .isIn(['pendiente', 'completada', 'cancelada']).withMessage('Estado inválido'),
   body('idUsuario')
     .isInt().withMessage('Debe ser un ID de usuario válido')
 ];

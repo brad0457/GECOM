@@ -2,7 +2,11 @@ import { useState, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import Usuarios from '../../components/modules/Usuarios';
 import Pacientes from '../../components/modules/Pacientes';
+import Citas from '../../components/modules/Citas';
+import Tareas from '../../components/modules/Tareas';
 import ConfirmModal from '../../components/ConfirmModal';
+import Inicio from '../../components/modules/Inicio';
+import Configuracion from '../../components/modules/Configuracion';
 
 function DashboardForm() {
   const [active, setActive] = useState('Inicio');
@@ -29,32 +33,12 @@ function DashboardForm() {
 
   // Mapeo de módulos
   const modules = {
-    'Inicio': (
-      <div>
-        <h2 className="text-2xl font-bold text-teal-900 mb-4">Bienvenido</h2>
-        <p className="text-teal-600">Panel de control principal</p>
-      </div>
-    ),
+    'Inicio': <Inicio />,
     'Pacientes': <Pacientes />,
-    'Citas': (
-      <div>
-        <h2 className="text-2xl font-bold text-teal-900 mb-4">Citas</h2>
-        <p className="text-teal-600">Módulo en desarrollo...</p>
-      </div>
-    ),
+    'Citas': <Citas />,
     'Usuarios': <Usuarios />,
-    'Tareas': (
-      <div>
-        <h2 className="text-2xl font-bold text-teal-900 mb-4">Tareas</h2>
-        <p className="text-teal-600">Módulo en desarrollo...</p>
-      </div>
-    ),
-    'Configuración': (
-      <div>
-        <h2 className="text-2xl font-bold text-teal-900 mb-4">Configuración</h2>
-        <p className="text-teal-600">Módulo en desarrollo...</p>
-      </div>
-    ),
+    'Tareas': <Tareas />,
+    'Configuración': <Configuracion />,
   };
 
   return (
