@@ -12,9 +12,7 @@ import { verificarToken } from '../middlewares/authMiddleware.js';
 
 const router = Router();
 
-// IMPORTANTE: Rutas específicas deben ir ANTES de rutas con parámetros
-
-// Cambiar contraseña del usuario actual (cualquier rol autenticado) - PRIMERO
+// Cambiar contraseña del usuario actual (cualquier rol autenticado)
 router.put('/cambiar-password', verificarToken, cambiarPassword);
 
 // Rutas de listado
@@ -23,7 +21,7 @@ router.get('/', verificarToken, listarUsuarios);
 // Solo admin puede crear usuarios
 router.post('/', verificarToken, soloAdmin, validarUsuario, manejarValidaciones, crearUsuario);
 
-// Rutas con :id van AL FINAL
+// Rutas con :id
 router.get('/:id', verificarToken, obtenerUsuario);
 router.put('/:id', verificarToken, soloAdmin, validarActualizarUsuario, manejarValidaciones, actualizarUsuario);
 router.delete('/:id', verificarToken, soloAdmin, eliminarUsuario);
