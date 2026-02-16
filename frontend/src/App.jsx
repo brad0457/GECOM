@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './routes/ProtectedRoute';
 import Login from './pages/Login/Login.jsx';
@@ -13,6 +13,9 @@ function App() {
     <Router>
       <AuthProvider>
         <Routes>
+          {/* Ruta raíz - redirige al dashboard si está autenticado, sino al login */}
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          
           {/* Rutas públicas */}
           <Route path="/login" element={<Login />} />
 
