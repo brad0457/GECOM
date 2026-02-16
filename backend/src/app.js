@@ -13,7 +13,12 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:5173'
+  origin: [
+    'http://localhost:5173',
+    'https://gecom-frontend.vercel.app',  // Provisional
+    /\.vercel\.app$/  // Permite cualquier subdominio de Vercel
+  ],
+  credentials: true
 }));
 
 
