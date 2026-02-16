@@ -15,8 +15,8 @@ const app = express();
 app.use(cors({
   origin: [
     'http://localhost:5173',
-    'https://gecom-frontend.vercel.app',  // Provisional
-    /\.vercel\.app$/  // Permite cualquier subdominio de Vercel
+    'https://gecom-dev.vercel.app',
+    /\.vercel\.app$/
   ],
   credentials: true
 }));
