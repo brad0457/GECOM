@@ -1,32 +1,44 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
-import Usuario from './Usuario.js';
 
 const Reporte = sequelize.define('Reporte', {
   idReporte: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
+    field: 'idreporte'
   },
   tipo: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(255),
     allowNull: false,
+    field: 'tipo'
   },
   fecha: {
     type: DataTypes.DATEONLY,
     allowNull: false,
+    field: 'fecha'
   },
   idUsuario: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    references: {
-      model: Usuario,
-      key: 'idUsuario',
-    },
+    field: 'idusuario'
   },
+  createdAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW,
+    field: 'createdat'
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW,
+    field: 'updatedat'
+  }
 }, {
   tableName: 'reporte',
-  timestamps: true,
+  timestamps: false,
+  freezeTableName: true
 });
 
 export default Reporte;

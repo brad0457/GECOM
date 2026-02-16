@@ -10,7 +10,6 @@ export const register = async (req, res, next) => {
     // Encriptar contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Crear usuario con rol
     const usuario = await Usuario.create({
       nombre,
       correo,
@@ -47,11 +46,16 @@ export const login = async (req, res, next) => {
 
     // Buscar usuario por correo
     const usuario = await Usuario.findOne({ where: { correo } });
-    if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
+    
+    if (!usuario) {
+      return res.status(404).json({ success: false, error: 'Usuario no encontrado' });
+    }
 
     // Comparar contraseñas
     const valido = await bcrypt.compare(password, usuario.password);
-    if (!valido) return res.status(401).json({ error: 'Credenciales inválidas' });
+    if (!valido) {
+      return res.status(401).json({ success: false, error: 'Credenciales inválidas' });
+    }
 
     // Generar token con id, rol y nombre
     const token = jwt.sign(
@@ -65,8 +69,15 @@ export const login = async (req, res, next) => {
     );
 
     // Devolvemos token y datos del usuario al frontend
-    res.json({ success: true, token, rol: usuario.rol, nombre: usuario.nombre });
+    res.json({ 
+      success: true, 
+      token, 
+      rol: usuario.rol, 
+      nombre: usuario.nombre 
+    });
+    
   } catch (error) {
+    console.error('Error en login:', error);
     next(error);
   }
 };

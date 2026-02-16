@@ -6,24 +6,18 @@ import Tarea from './Tarea.js';
 import Reporte from './Reporte.js';
 
 // Relaciones
+Usuario.hasMany(Cita, { foreignKey: 'idusuario' });
+Cita.belongsTo(Usuario, { foreignKey: 'idusuario' });
 
-// Usuario ↔ Cita
-Usuario.hasMany(Cita, { foreignKey: 'idUsuario' });
-Cita.belongsTo(Usuario, { foreignKey: 'idUsuario' });
+Paciente.hasMany(Cita, { foreignKey: 'idpaciente' });
+Cita.belongsTo(Paciente, { foreignKey: 'idpaciente' });
 
-// Paciente ↔ Cita
-Paciente.hasMany(Cita, { foreignKey: 'idPaciente' });
-Cita.belongsTo(Paciente, { foreignKey: 'idPaciente' });
+Usuario.hasMany(Tarea, { foreignKey: 'idusuario' });
+Tarea.belongsTo(Usuario, { foreignKey: 'idusuario' });
 
-// Usuario ↔ Tarea
-Usuario.hasMany(Tarea, { foreignKey: 'idUsuario' });
-Tarea.belongsTo(Usuario, { foreignKey: 'idUsuario' });
+Usuario.hasMany(Reporte, { foreignKey: 'idusuario' });
+Reporte.belongsTo(Usuario, { foreignKey: 'idusuario' });
 
-// Usuario ↔ Reporte
-Usuario.hasMany(Reporte, { foreignKey: 'idUsuario' });
-Reporte.belongsTo(Usuario, { foreignKey: 'idUsuario' });
-
-// Exportar modelos y sequelize
 export {
   sequelize,
   Usuario,
