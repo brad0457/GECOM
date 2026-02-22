@@ -16,6 +16,9 @@ app.use(cors({
   origin: [
     'http://localhost:5173',
     'https://gecom-dev.vercel.app',
+    'capacitor://localhost',  // Para APK
+    'http://localhost',  // Para APK en desarrollo
+    'ionic://localhost',  // Por si acaso
     /\.vercel\.app$/
   ],
   credentials: true
