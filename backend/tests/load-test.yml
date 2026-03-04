@@ -1,0 +1,27 @@
+config:
+  target: "https://gecom-backend-jqy5.onrender.com"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      name: "Warm up"
+    - duration: 120
+      arrivalRate: 10
+      name: "Sustained load"
+  http:
+    timeout: 30
+
+scenarios:
+  - name: "Login y listar pacientes"
+    flow:
+      - post:
+          url: "/auth/login"
+          json:
+            correo: "admin@test.com"
+            password: "123456"
+          capture:
+            - json: "$.token"
+              as: "token"
+      - get:
+          url: "/pacientes"
+          headers:
+            Authorization: "Bearer {{ token }}"
